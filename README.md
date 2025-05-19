@@ -1,61 +1,120 @@
-# 🚀 Getting started with Strapi
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+# 📦 Adopta'Compagnon – Backend Strapi
 
-### `develop`
-
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
-
-```
-npm run develop
-# or
-yarn develop
-```
-
-### `start`
-
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
-
-```
-npm run start
-# or
-yarn start
-```
-
-### `build`
-
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
-
-```
-npm run build
-# or
-yarn build
-```
-
-## ⚙️ Deployment
-
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
-
-```
-yarn strapi deploy
-```
-
-## 📚 Learn more
-
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
-
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
-
-## ✨ Community
-
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+Bienvenue dans le dépôt backend de l’application **Adopta'Compagnon**, développée avec **Strapi**.
+Ce backend gère les données liées aux animaux, refuges, types d’animaux et demandes d’adoption.  
+Il expose une API REST consommée par le frontend Vue.js pour permettre aux utilisateurs de consulter les profils d’animaux et envoyer une demande d’adoption.
 
 ---
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+## 🚀 Lancer le projet en local
+
+1. Cloner le dépôt :
+```bash
+git clone https://github.com/Tom-Dln/adopta-backend.git
+cd adopta-backend
+```
+
+2. Installer les dépendances :
+```bash
+npm install
+```
+
+3. Lancer Strapi :
+```bash
+npm run develop
+```
+
+Par défaut, Strapi démarre sur `http://localhost:1337`.  
+L’interface d’administration est disponible à cette adresse pour gérer les contenus.
+
+---
+
+## 🗂️ Structure des collections (modèles Strapi)
+
+### 1. 🐾 `Animal`
+| Champ        | Type     | Description                                 |
+|--------------|----------|---------------------------------------------|
+| name         | String   | Nom de l’animal                             |
+| documentId   | UID      | Identifiant unique pour accès par l'API     |
+| age          | Number   | Âge de l’animal (en années)                 |
+| description  | Text     | Présentation ou comportement                |
+| breed        | String   | Race ou croisement                          |
+| size         | Enum     | Taille : `small`, `medium`, `large`         |
+| sterilized   | Boolean  | Indique si l’animal est stérilisé           |
+| adopted      | Boolean  | Statut d’adoption                           |
+| photo        | Media    | Image principale                            |
+| type         | Relation | `many-to-one` vers `Type`                   |
+| shelter      | Relation | `many-to-one` vers `Shelter`                |
+
+### 2. 🧬 `Type`
+| Champ      | Type     | Description              |
+|------------|----------|--------------------------|
+| name       | String   | Espèce (chien, chat...)  |
+| documentId | UID      | Identifiant unique       |
+
+### 3. 🏠 `Shelter`
+| Champ          | Type     | Description                     |
+|----------------|----------|---------------------------------|
+| name           | String   | Nom du refuge                   |
+| address        | String   | Adresse complète                |
+| phone          | String   | Téléphone du refuge             |
+| contact_email  | Email    | Email de contact                |
+| website        | String   | Site internet (sans https)      |
+| documentId     | UID      | Identifiant unique              |
+
+### 4. 📝 `AdoptionRequest`
+| Champ          | Type      | Description                             |
+|----------------|-----------|-----------------------------------------|
+| full_name      | String    | Nom et prénom du demandeur              |
+| email          | Email     | Adresse mail du demandeur               |
+| phone          | String    | Numéro de téléphone                     |
+| message        | Text      | Message personnalisé                    |
+| request_status | Enum      | État de la demande (`pending`, etc.)    |
+| animal         | Relation  | Animal concerné (vers `Animal`)         |
+
+---
+
+## 🧩 Schéma relationnel
+
+```
+[Shelter] 1---* [Animal] *---1 [Type]
+                    |
+                    *---1 [AdoptionRequest]
+```
+
+- Un `Shelter` possède plusieurs `Animals`
+- Un `Type` peut être partagé entre plusieurs animaux
+- Une `AdoptionRequest` est liée à **un seul** `Animal`
+
+---
+
+## 🔁 Routes API utilisées
+
+### 🔹 `Animal`
+- `GET /api/animals` — liste des animaux
+- `GET /api/animals/:id` — détail d’un animal
+- `GET /api/animals?filters[documentId][$eq]=...&populate=*`
+
+### 🔹 `Shelter`
+- `GET /api/shelters` — liste des refuges
+
+### 🔹 `Type`
+- `GET /api/types` — liste des types d’animaux
+
+### 🔹 `AdoptionRequest`
+- `POST /api/adoption-requests` — envoi d'une demande
+- Champs : `full_name`, `email`, `phone`, `message`, `animal`, `request_status`
+
+---
+
+## 🧑‍💻 Technologies
+- **Strapi** v4
+- **SQLite** (développement)
+- API REST + Interface Admin intégrée
+
+---
+
+## 📝 Auteur
+
+Tom Delaunay | MyDigitalSchool Caen | M2-DFS 2025
