@@ -30,9 +30,9 @@
     "size": {
       "type": "enumeration",
       "enum": [
-        "small",
-        "medium",
-        "large"
+        "Petit",
+        "Moyen",
+        "Grand"
       ],
       "required": true
     },

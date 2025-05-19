@@ -468,7 +468,7 @@ export interface ApiAnimalAnimal extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     shelter: Schema.Attribute.Relation<'oneToOne', 'api::shelter.shelter'>;
-    size: Schema.Attribute.Enumeration<['small', 'medium', 'large']> &
+    size: Schema.Attribute.Enumeration<['Petit', 'Moyen', 'Grand']> &
       Schema.Attribute.Required;
     sterilized: Schema.Attribute.Boolean & Schema.Attribute.Required;
     type: Schema.Attribute.Relation<'oneToOne', 'api::animal-type.animal-type'>;
