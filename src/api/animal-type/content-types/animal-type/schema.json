@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "animal_types",
+  "info": {
+    "singularName": "animal-type",
+    "pluralName": "animal-types",
+    "displayName": "animal-type"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
